@@ -1,5 +1,5 @@
 import React from 'react';
-import EscapeTable from './components/EscapeTable'; 
+import EscapeTable from './components/EscapeTable.js'; 
 
 function App() {
   return (
