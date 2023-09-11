@@ -6,7 +6,7 @@ const MONGO_URI = "mongodb+srv://escape_developer:IWZ0q0jYUlXxZeCO@escape.jbdzly
 const DB_NAME = "escape_thema";  
 const COLLECTION_NAME = "store"; 
 
-router.get('/', async (req, res) => {
+router.get('/api/thema', async (req, res) => {
     console.log('라우터왔다');
     const client = new MongoClient(MONGO_URI, { useUnifiedTopology: true });
     let data = [];
