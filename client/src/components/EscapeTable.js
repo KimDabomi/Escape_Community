@@ -1,42 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
 const EscapeTable = (() => {
-    const [data, setData] = useState([]);
-
+    const [themaList, setThemaList] = useState([]);
+    const requestOptions = {
+        headers: { 'Content-Type': 'application/json' }
+    };
     useEffect(() => {
-        fetch('/api/thema')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const contentType = response.headers.get('Content-Type');
-            if (!contentType || !contentType.includes('application/json')) {
-                return response.text().then(text => {
-                    throw new Error(`JSON 아님: ${text}`);
-                });
-            }
-            return response.json();
-        })
-        .then(rawData => {
-            const transformedData = rawData.map(item => {
-                const transformedValue = item.value.map(themeResultObj => {
-                    return themeResultObj[Object.keys(themeResultObj)[0]];
-                });
-                return {
-                    key: item.key,
-                    value: transformedValue
-                };
-            });
-            setData(transformedData);
-        })
-        .catch(error => console.error('There was a problem with the fetch operation:', error.message));
-    }, []);
-    
-    
+        fetch('/api/thema',requestOptions)
+          .then(response => response.json())
+          .then(data => setThemaList(data.aThema))
+          .catch(error => console.error('Error fetching thema:', error));
+      }, []);
 
     return (
         <div>
-            {data.map(item => (
+            {themaList.map(item => (
                 <div key={item.name}>
                     <h2>{item.region}</h2>
                     <table>
@@ -47,7 +25,6 @@ const EscapeTable = (() => {
                                 <th>Name</th>
                                 <th>Star</th>
                                 <th>Level</th>
-                                <th>Review Count</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,7 +34,6 @@ const EscapeTable = (() => {
                                 <td>{item.name}</td>
                                 <td>{item.star}</td>
                                 <td>{item.level}</td>
-                                <td>{item.review_cnt}</td>
                             </tr>
                         </tbody>
                     </table>
