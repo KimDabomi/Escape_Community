@@ -117,7 +117,8 @@ app.use(passport.initialize());
 //     next();
 // });
 
-app.use(express.static(__dirname + '../client/build'));
+app.use(express.static(__dirname + '/client/build'));
+
 // Routes
 app.use('/',require('./routes/ThemaRouter'));
 
@@ -135,12 +136,14 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/build/index.html'));
+  });
+  
+
 // Port setting
 const port = 4001;
 app.listen(port, '0.0.0.0', function () {
     console.info('server on! http://localhost:' + port);
-});
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/build'));
 });
 

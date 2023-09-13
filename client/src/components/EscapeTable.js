@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const EscapeTable = (() => {
     const [themaList, setThemaList] = useState([]);
-    const requestOptions = {
-        headers: { 'Content-Type': 'application/json' }
-    };
+
     useEffect(() => {
-        fetch('/api/thema',requestOptions)
-          .then(response => response.json())
-          .then(data => setThemaList(data.aThema))
-          .catch(error => console.error('Error fetching thema:', error));
-      }, []);
+       const fetchData = async () => {
+          try {
+             const response = await axios.get('http://localhost:4001/api/thema');
+             setThemaList(response.data.aThema);
+          } catch (error) {
+             console.error("Error fetching data:", error);
+          }
+       };
+       fetchData();
+    }, []);
+ 
 
     return (
         <div>
-            {themaList.map(item => (
+            {themaList && (themaList.map(item => (
                 <div key={item.name}>
                     <h2>{item.region}</h2>
                     <table>
@@ -38,7 +43,7 @@ const EscapeTable = (() => {
                         </tbody>
                     </table>
                 </div>
-            ))}
+            )))}
         </div>
     );
       
