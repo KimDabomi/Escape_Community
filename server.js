@@ -120,7 +120,7 @@ app.use(passport.initialize());
 app.use(express.static(__dirname + '/client/build'));
 
 // Routes
-app.use('/',require('./routes/ThemaRouter'));
+app.use('/',require('./routes/Router'));
 
 // error
 // app.use(function (req, res, next) {

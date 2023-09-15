@@ -1,13 +1,17 @@
 import React from 'react';
+import { Routes, Route } from 'react-router';
 import EscapeTable from './components/EscapeTable.js'; 
+import PostWrite from './components/PostWrite.js';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Escape Room Data</h1>
-      </header>
-      <EscapeTable />
+    <div>
+      <Routes>
+        {/* 메인 */}
+        <Route path="/" exapt={true} element={<EscapeTable />} />
+        {/* 글쓰기 */}
+        <Route path="/write" element={<PostWrite />} />
+      </Routes>
     </div>
   );
 }

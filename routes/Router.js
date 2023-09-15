@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const modelThema = require('../models/modelThema');
+const modelPost = require('../models/modelPost');
 
 
-// Home
+// 테마 불러오기
 router.get("/api/thema", async (req, res) => {
     console.log('ROUTER!!!!!!!!!!');
     try {
@@ -24,6 +25,16 @@ router.get("/api/thema", async (req, res) => {
 });
   
 
+// 글쓰기
+router.post('/api/create', async (req, res) => {
+    try {
+        const newPost = new modelPost(req.body);
+        const savedPost = await newPost.save();
+        res.json(savedPost);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create post' });
+    }
+});
 
 
 module.exports = router; 

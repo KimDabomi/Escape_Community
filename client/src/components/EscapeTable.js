@@ -18,33 +18,35 @@ const EscapeTable = (() => {
  
 
     return (
-        <div>
-            {themaList && (themaList.map(item => (
-                <div key={item.name}>
-                    <h2>{item.region}</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Region</th>
-                                <th>Store</th>
-                                <th>Name</th>
-                                <th>Star</th>
-                                <th>Level</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{item.region}</td>
-                                <td>{item.store}</td>
-                                <td>{item.name}</td>
-                                <td>{item.star}</td>
-                                <td>{item.level}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            )))}
-        </div>
+        <>
+            <div>
+                {themaList && (themaList.map(item => (
+                    <div key={item.name}>
+                        <h2>{item.region}</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Region</th>
+                                    <th>Store</th>
+                                    <th>Name</th>
+                                    <th>Star</th>
+                                    <th>Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{item.region}</td>
+                                    <td>{item.store}</td>
+                                    <td>{item.name}</td>
+                                    <td>{item.star}</td>
+                                    <td>{item.level}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                )))}
+            </div>
+        </>
     );
       
 });
