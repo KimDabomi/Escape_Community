@@ -77,6 +77,45 @@ router.get("/api/view/:id", async (req, res) => {
 });
 
 
+// 글수정
+router.put("/api/update/:id", async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const updatedPost = await modelPost.findByIdAndUpdate({ id: postId }, req.body, { new: true });
+
+        if (!updatedPost) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        res.json(updatedPost);
+    } catch (error) {
+        console.error("Error updating post:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+// 글삭제
+router.delete("/api/delete/:id", async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const deletedPost = await modelPost.findOneAndDelete({ id: postId });
+
+        if (!deletedPost) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        res.json({ message: "Post deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting post:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+
+
+
 
 
 module.exports = router; 
