@@ -42,6 +42,7 @@ router.get("/api/read", async (req, res) => {
     try {
         const postList = await modelPost.find();
         const formattedList = postList.map(oPost => ({
+            'id': oPost.id,
             'title': oPost.title,
             'content': oPost.content
         }));
@@ -51,6 +52,30 @@ router.get("/api/read", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
+// 글보기
+router.get("/api/view/:id", async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const post = await modelPost.findOne({ id: postId });
+
+        if (!post) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        const formattedPost = {
+            'title': post.title,
+            'content': post.content
+        };
+
+        res.json(formattedPost);
+    } catch (error) {
+        console.error("Error fetching post:", error.message, error.stack);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 
 
 

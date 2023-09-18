@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const PostList = (() => {
@@ -15,14 +16,14 @@ const PostList = (() => {
         };
        fetchData();
     }, []);
- 
+
 
     return (
         <>
             <div>
                 {postList && (postList.map(item => (
                     <div key={item.name}>
-                        <h2>{item.title}</h2>
+                        <Link to={`/view/${item.id}`}><h2>{item.title}</h2></Link>
                         <p>{item.content}</p>
                     </div>
                 )))}
