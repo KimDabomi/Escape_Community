@@ -37,4 +37,21 @@ router.post('/api/create', async (req, res) => {
 });
 
 
+// 글불러오기
+router.get("/api/read", async (req, res) => {
+    try {
+        const postList = await modelPost.find();
+        const formattedList = postList.map(oPost => ({
+            'title': oPost.title,
+            'content': oPost.content
+        }));
+        res.json({ aPost: formattedList });
+    } catch (error) {
+        console.error("Error fetching thema:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+
 module.exports = router; 
