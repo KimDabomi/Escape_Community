@@ -5,6 +5,8 @@ import PostWrite from './components/PostWrite.js';
 import PostList from './components/PostList.js';
 import PostView from './components/PostView.js';
 import PostEdit from './components/PostEdit.js';
+import Login from './components/Login.js';
+import Register from './components/Register.js';
 
 function App() {
   return (
@@ -20,6 +22,10 @@ function App() {
         <Route path="/view/:postId" element={<PostView />} />
         {/* 글수정 */}
         <Route path="/edit/:postId" element={<PostEdit />} />
+        {/* 로그인 */}
+        <Route path="/login" element={<Login />} />
+        {/* 회원가입 */}
+        <Route path="/register" element={<Register />} />
       </Routes>
     </div>
   );

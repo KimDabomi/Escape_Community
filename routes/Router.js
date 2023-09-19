@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const modelThema = require('../models/modelThema');
 const modelPost = require('../models/modelPost');
-
+const modelUsers = require('../models/modelUsers');
+const passport = require('../config/passport');
 
 // 테마 불러오기
 router.get("/api/thema", async (req, res) => {
@@ -22,7 +23,7 @@ router.get("/api/thema", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-  
+
 
 // 글쓰기
 router.post('/api/create', async (req, res) => {
@@ -114,6 +115,76 @@ router.delete("/api/delete/:id", async (req, res) => {
 
 
 
+// 로그인
+router.get("/login", async function (req, res) {
+    const errors = req.flash("errors")[0] || {};
+    const info = req.flash("info")[0] || {};
+    console.log("login get info", info);
+
+    res.render("login", {
+        info: info,
+        errors: errors,
+    });
+});
+
+router.post("/login", (req, res, next) => {
+    passport.authenticate("local-login", (err, user, info) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!user) {
+            return res.status(401).json({ error: info.message });
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            const userResponse = {
+                username: user.username
+            };
+            return res.json({ success: true, user: userResponse });
+        });
+    })(req, res, next);
+});
+
+
+
+
+// 로그아웃
+router.get("/logout", function (req, res) {
+    req.logout((a) => res.redirect("/login"));
+});
+
+
+// 회원가입
+router.get("/register", function (req, res) {
+    res.render("register", {
+        test: { abc: "mart" },
+    });
+});
+
+router.post("/register", async function (req, res) {
+    const { username, password, name, passwordConfirmation } = req.body;
+    try {
+        const oResult = await modelUsers.create({
+            username: username,
+            password: password,
+            name: name,
+            passwordConfirmation: passwordConfirmation,
+        });
+        console.log("oResult", oResult);
+        if (oResult) {
+            res.json({
+                register: true,
+            });
+        }
+    } catch (error) {
+        res.json({
+            register: false,
+            message: "에러가 발생했습니다: " + error.message,
+        });
+    }
+});
 
 
 
