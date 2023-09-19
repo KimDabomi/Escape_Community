@@ -32,18 +32,23 @@ const postSchema = mongoose.Schema({
 
 
 postSchema.pre('save', async function(next) {
-  try {
-      const counter = await Counter.findByIdAndUpdate(
-          { _id: 'postId' },
-          { $inc: { seq: 1 } },
-          { new: true, upsert: true }
-      );
-      this.id = counter.seq;
+  if (this.isNew) {
+      try {
+          const counter = await Counter.findByIdAndUpdate(
+              'postId',
+              { $inc: { seq: 1 } },
+              { new: true, upsert: true }
+          );
+          this.id = counter.seq;
+          next();
+      } catch (error) {
+          next(error);
+      }
+  } else {
       next();
-  } catch (error) {
-      next(error);
   }
 });
+
 
 
 const modelPost = mongoose.model('post', postSchema);

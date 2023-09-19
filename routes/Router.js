@@ -81,8 +81,10 @@ router.get("/api/view/:id", async (req, res) => {
 router.put("/api/update/:id", async (req, res) => {
     try {
         const postId = req.params.id;
-        const updatedPost = await modelPost.findByIdAndUpdate({ id: postId }, req.body, { new: true });
-
+        const updatedPost = await modelPost.findOneAndUpdate({ id: postId }, req.body, { new: true });
+        console.log("Update request received for ID:", postId);
+        console.log("Request body:", req.body);
+        console.log("Updated post:", updatedPost);
         if (!updatedPost) {
             return res.status(404).json({ error: "Post not found" });
         }
@@ -93,6 +95,7 @@ router.put("/api/update/:id", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
 
 
 // 글삭제

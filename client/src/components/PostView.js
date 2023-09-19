@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
 const ViewContainer = styled.div`
     width: 100%;
-    .edit_complete,
     .delete_complete {
         display: none;
         position: fixed;
@@ -59,21 +58,6 @@ const PostView = () => {
     }, [postId]);
 
 
-    // 글수정
-    // const updatePost = async () => {
-    //     try {
-    //         const postData = {
-    //             title: title,
-    //             content: content
-    //         };
-    //         const response = await axios.put(`http://localhost:4001/api/update/${postId}`, postData);
-    //         document.querySelector(".edit_complete").style.display = "block";            
-    //     } catch (error) {
-    //         console.error('Failed to update post:', error);
-    //     }
-    // };
-
-
     // 글삭제
     const deletePost = async () => {
         try {
@@ -88,7 +72,6 @@ const PostView = () => {
 
     // 팝업닫기
     const closeBox = (e) => {
-        document.querySelector(".edit_complete").style.display = "none";
         document.querySelector(".delete_complete").style.display = "none";
     };
 
@@ -100,20 +83,10 @@ const PostView = () => {
                         <div>
                             <h2>{postView.title}</h2>
                             <p>{postView.content}</p>
-                            {/* <button onClick={updatePost}>수정</button> */}
+                            <Link to={`/edit/${postId}`}><button>수정</button></Link>
                             <button onClick={deletePost}>삭제</button>
                         </div>
                     )}
-                    <form className="edit_complete">
-                        <div className="popup">
-                            <p>
-                                글수정이 완료되었습니다.
-                            </p>
-                            <button type="button" className="close" onClick={closeBox}>
-                                닫기
-                            </button>
-                        </div>
-                    </form>
                     <form className="delete_complete">
                         <div className="popup">
                             <p>

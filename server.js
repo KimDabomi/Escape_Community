@@ -19,7 +19,7 @@ const MONGO_URI = "mongodb+srv://escape_developer:IWZ0q0jYUlXxZeCO@escape.jbdzly
 const DB_NAME = "escape_thema";
 const COLLECTION_NAME = "store";
 
-mongoose.connect(MONGO_URI);
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', function (err) {
     console.error('DB ERROR : ', err);
