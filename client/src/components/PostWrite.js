@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import styled from "styled-components";
+import { useParams, useNavigate } from "react-router";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -48,6 +49,8 @@ const PostWrite = (() => {
     const [title, setTitle] = useState("");
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [htmlString, setHtmlString] = useState("");
+    const navigate = useNavigate();
+    const { postId } = useParams();
   
     const updateTextDescription = async (state) => {
       await setEditorState(state);
@@ -64,21 +67,21 @@ const PostWrite = (() => {
         try {
             const postData = {
                 title: title,
-                content: htmlString
+                content: htmlString,
+                postId: postId
             };
             const response = await axios.post('http://localhost:4001/api/create', postData);
-            console.log('Post created:', response.data);
-
-            // 팝업
-            document.querySelector(".write_complete").style.display = "block";            
+            document.querySelector(".write_complete").style.display = "block";     
+            const newPostId = response.data.id; 
+            navigate(`/view/${newPostId}`);
         } catch (error) {
-            console.error('Failed to create post:', error);
+            console.error('글쓰기 실패: ', error);
         }
     };
 
     // 팝업닫기
     const closeBox = (e) => {
-        document.querySelector(".write_complete").style.display = "none";
+      document.querySelector(".write_complete").style.display = "none";
     };
     
     return (

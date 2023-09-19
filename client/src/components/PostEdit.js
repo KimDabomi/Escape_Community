@@ -65,7 +65,7 @@ const PostEdit = () => {
                 const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
                 setEditorState(EditorState.createWithContent(contentState));
             } catch (error) {
-                console.error("Error fetching post for editing:", error);
+                console.error("수정글 불러오기 실패: ", error);
             }
         };
         fetchData();
@@ -82,27 +82,19 @@ const PostEdit = () => {
 
     // 글수정
     const updatePost = async () => {
-        if (!postView) {
-            console.error('postView is null or undefined');
-            return;
-        }
-
         const currentContent = editorState.getCurrentContent();
         const htmlContent = stateToHTML(currentContent);
-
         try {
             const postData = {
                 title: title,
                 content: htmlContent
             };
-            console.log('----------postData',postData);
             const response = await axios.put(`http://localhost:4001/api/update/${postId}`, postData);
-            console.log('--------',response.data);
             setTitle(response.data.title);
             setPostView(response.data);    
             document.querySelector(".edit_complete").style.display = "block";            
         } catch (error) {
-            console.error('Failed to update post:', error);
+            console.error('글수정 실패: ', error);
         }
     };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -44,6 +44,7 @@ const ViewContainer = styled.div`
 const PostView = () => {
     const [postView, setPostView] = useState(null);
     const { postId } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -51,7 +52,7 @@ const PostView = () => {
                 const response = await axios.get(`http://localhost:4001/api/view/${postId}`);
                 setPostView(response.data);
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error("글 불러오기 실패: ", error);
             }
         };
        fetchData();
@@ -61,11 +62,10 @@ const PostView = () => {
     // 글삭제
     const deletePost = async () => {
         try {
-            const response = await axios.delete(`http://localhost:4001/api/delete/${postId}`);
-            console.log('--------',response);
+            await axios.delete(`http://localhost:4001/api/delete/${postId}`);
             document.querySelector(".delete_complete").style.display = "block";            
         } catch (error) {
-            console.error('Failed to delete post:', error);
+            console.error('글삭제 실패: ', error);
         }
     };
 
@@ -73,6 +73,7 @@ const PostView = () => {
     // 팝업닫기
     const closeBox = (e) => {
         document.querySelector(".delete_complete").style.display = "none";
+        navigate('/list');
     };
 
     return (

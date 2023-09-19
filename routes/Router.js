@@ -6,7 +6,6 @@ const modelPost = require('../models/modelPost');
 
 // 테마 불러오기
 router.get("/api/thema", async (req, res) => {
-    console.log('ROUTER!!!!!!!!!!');
     try {
         const themaList = await modelThema.find();
         const formattedList = themaList.map(oThema => ({
@@ -19,7 +18,7 @@ router.get("/api/thema", async (req, res) => {
 
         res.json({ aThema: formattedList });
     } catch (error) {
-        console.error("Error fetching thema:", error);
+        console.error("테마목록 라우팅 실패: ", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
@@ -48,7 +47,7 @@ router.get("/api/read", async (req, res) => {
         }));
         res.json({ aPost: formattedList });
     } catch (error) {
-        console.error("Error fetching thema:", error);
+        console.error("글목록 라우팅 실패: ", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
@@ -71,7 +70,7 @@ router.get("/api/view/:id", async (req, res) => {
 
         res.json(formattedPost);
     } catch (error) {
-        console.error("Error fetching post:", error.message, error.stack);
+        console.error("글보기 라우팅 실패: ", error.message, error.stack);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
@@ -82,16 +81,13 @@ router.put("/api/update/:id", async (req, res) => {
     try {
         const postId = req.params.id;
         const updatedPost = await modelPost.findOneAndUpdate({ id: postId }, req.body, { new: true });
-        console.log("Update request received for ID:", postId);
-        console.log("Request body:", req.body);
-        console.log("Updated post:", updatedPost);
         if (!updatedPost) {
             return res.status(404).json({ error: "Post not found" });
         }
 
         res.json(updatedPost);
     } catch (error) {
-        console.error("Error updating post:", error);
+        console.error("글수정 라우팅 실패: ", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
@@ -110,7 +106,7 @@ router.delete("/api/delete/:id", async (req, res) => {
 
         res.json({ message: "Post deleted successfully" });
     } catch (error) {
-        console.error("Error deleting post:", error);
+        console.error("글삭제 라우팅 실패: ", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });

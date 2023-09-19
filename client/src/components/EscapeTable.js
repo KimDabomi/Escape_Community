@@ -10,7 +10,7 @@ const EscapeTable = (() => {
              const response = await axios.get('http://localhost:4001/api/thema');
              setThemaList(response.data.aThema);
           } catch (error) {
-             console.error("Error fetching data:", error);
+             console.error("테마 불러오기 실패: ", error);
           }
        };
        fetchData();
@@ -20,8 +20,8 @@ const EscapeTable = (() => {
     return (
         <>
             <div>
-                {themaList && (themaList.map(item => (
-                    <div key={item.name}>
+                {themaList && (themaList.map((item, index) => (
+                    <div key={index}>
                         <h2>{item.region}</h2>
                         <table>
                             <thead>
