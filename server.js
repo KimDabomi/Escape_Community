@@ -86,7 +86,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(flash());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // 클라이언트 주소
+    credentials: true
+}));
+
 
 
 session,

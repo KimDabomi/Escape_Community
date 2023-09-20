@@ -120,17 +120,12 @@ router.get("/login", async function (req, res) {
     const errors = req.flash("errors")[0] || {};
     const info = req.flash("info")[0] || {};
     console.log("login get info", info);
-
-    res.render("login", {
-        info: info,
-        errors: errors,
-    });
 });
 
 router.post("/login", (req, res, next) => {
     passport.authenticate("local-login", (err, user, info) => {
         if (err) {
-            console.error("패스포트 에러: ", err); // 로그에 에러 출력
+            console.error("패스포트 에러: ", err);
             return res.status(500).json({ error: "Internal server error" });
         }
         if (!user) {
@@ -138,9 +133,12 @@ router.post("/login", (req, res, next) => {
         }
         req.logIn(user, (err) => {
             if (err) {
-                console.error("로그인 에러: ", err); // 로그에 에러 출력
+                console.error("로그인 에러: ", err);
                 return res.status(500).json({ error: "Failed to log in" });
             }
+            console.log("로그인 후 세션: ", req.session);
+            req.session.username = user.username;
+            console.log("세션에 저장된 username: ", req.session.username); // 이 부분 추가
             const userResponse = {
                 id: user.id,
                 username: user.username
@@ -149,6 +147,16 @@ router.post("/login", (req, res, next) => {
         });
     })(req, res, next);
 });
+
+// 세션
+router.get("/api/session", (req, res) => {
+    if (req.isAuthenticated()) {
+        return res.json({ username: req.session.username });
+    } else {
+        return res.status(401).json({ error: "Not authenticated" });
+    }
+});
+
 
 
 
@@ -189,6 +197,7 @@ router.post("/register", async function (req, res) {
         });
     }
 });
+
 
 
 
