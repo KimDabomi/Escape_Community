@@ -1,12 +1,5 @@
 const mongoose = require('mongoose');
-
-const counterSchema = new mongoose.Schema({
-  _id: { type: String, required: true },
-  seq: { type: Number, default: 0 }
-});
-
-const Counter = mongoose.model('Counter', counterSchema);
-
+const modelCounter = require('./modelCounter');
 
 const postSchema = mongoose.Schema({
   id: {
@@ -34,7 +27,7 @@ const postSchema = mongoose.Schema({
 postSchema.pre('save', async function(next) {
   if (this.isNew) {
       try {
-          const counter = await Counter.findByIdAndUpdate(
+          const counter = await modelCounter.findByIdAndUpdate(
               'postId',
               { $inc: { seq: 1 } },
               { new: true, upsert: true }

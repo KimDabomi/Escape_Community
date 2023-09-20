@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const modelCounter = require('./modelCounter');
+
 
 // schema
 const userSchema = mongoose.Schema({
+  id: {
+    type: Number
+  },
   username:{
     type:String,
     required:[true,'Username is required!'],
@@ -100,6 +105,26 @@ userSchema.pre('save', function (next){
     return next();
   }
 });
+
+
+userSchema.pre('save', async function(next) {
+  if (this.isNew) {
+      try {
+          const counter = await modelCounter.findByIdAndUpdate(
+              'userId',
+              { $inc: { seq: 1 } },
+              { new: true, upsert: true }
+          );
+          this.id = counter.seq;
+          next();
+      } catch (error) {
+          next(error);
+      }
+  } else {
+      next();
+  }
+});
+
 
 
 

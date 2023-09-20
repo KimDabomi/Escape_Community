@@ -7,9 +7,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const flash = require('connect-flash');
-// const session = require('express-session');
+const session = require('express-session');
 const passport = require('./config/passport');
-// const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo');
 const methodOverride = require('method-override');
 const schedule = require('node-schedule');
 const modelThema = require('./models/modelThema');
@@ -89,24 +89,24 @@ app.use(flash());
 app.use(cors());
 
 
-// session,
-// app.use(session({
-//     secret: 'dabomi',
-//     resave: false,
-//     saveUninitialized: false,
-//     store: MongoStore.create({
-//         mongoUrl: MONGO_URI,
-//         collectionName: 'sessions',
-//     }),
-//     cookie: {
-//         maxAge: 1000 * 60 * 60
-//     }
-// }));
+session,
+app.use(session({
+    secret: 'escape',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: MONGO_URI,
+        collectionName: 'sessions',
+    }),
+    cookie: {
+        maxAge: 1000 * 60 * 60
+    }
+}));
 
 
 // Passport
 app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.session());
 
 
 // locals

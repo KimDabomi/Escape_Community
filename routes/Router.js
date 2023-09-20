@@ -130,22 +130,26 @@ router.get("/login", async function (req, res) {
 router.post("/login", (req, res, next) => {
     passport.authenticate("local-login", (err, user, info) => {
         if (err) {
-            return res.status(500).json({ error: err.message });
+            console.error("패스포트 에러: ", err); // 로그에 에러 출력
+            return res.status(500).json({ error: "Internal server error" });
         }
         if (!user) {
             return res.status(401).json({ error: info.message });
         }
         req.logIn(user, (err) => {
             if (err) {
-                return res.status(500).json({ error: err.message });
+                console.error("로그인 에러: ", err); // 로그에 에러 출력
+                return res.status(500).json({ error: "Failed to log in" });
             }
             const userResponse = {
+                id: user.id,
                 username: user.username
             };
             return res.json({ success: true, user: userResponse });
         });
     })(req, res, next);
 });
+
 
 
 
